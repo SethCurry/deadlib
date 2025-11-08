@@ -29,6 +29,29 @@
 
 (defrecord HeroColors [glow-enemy glow-friendly glow-team1 glow-team2 ui])
 
+(defrecord ShopSpiritStatsDisplay [display-stats])
+
+(defrecord ShoptVitalityStatsDisplay [display-stats other-display-stats])
+
+(defrecord ShopWeaponStatsDisplay [display-stats other-display-stats weapon-attributes weapon-image weapon-image-webp])
+
+(defrecord ShopStatsDisplay [spirit-stats vitality-stats weapon-stats])
+
+(defrecord CostBonus [gold-threshold bonus percent-on-graph])
+
+(defrecord CostBonuses [bonuses])
+
+(defrecord StatsDisplay [health-header-stats
+                          health-body-stats
+                          magic-header-stats
+                          magic-stats
+                          weapon-header-stats
+                          weapon-stats])
+
+(defrecord DisplayStats [category stat-type])
+
+(defrecord HeroStatsUI [weapon-stat-display display-stats])
+
 (defrecord Hero [id
                   class-name
                   name
@@ -52,7 +75,11 @@
                   starting-stats
                   item-slot-info
                   physics
-                  colors])
+                  colors
+                  shop-stats-display
+                  cost-bonuses
+                  stats-display
+                  hero-stats-ui])
 
 (defn list-heroes []
   (let [response (http/get "https://assets.deadlock-api.com/v2/heroes")]
