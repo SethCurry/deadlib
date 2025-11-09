@@ -139,15 +139,7 @@
                  stats-display
                  hero-stats-ui])
 
-(defn validate-hero-json []
-  (let [expected-keys [:id
-                       :class_name
-                       :name
-                       :description
-                       :recommended_upgrades
-                       :recommended_ability_order]]))
-
-(defn hero-from-json [as-json]
+(defn hero-from-map [as-json]
   (map->Hero (unmarshal-map as-json {:id {:unmarshal-fn (fn [x] {:id x})}
                                      :class_name {:unmarshal-fn (fn [x] {:class-name x})}
                                      :name {:unmarshal-fn (fn [x] {:name x})}
