@@ -4,6 +4,12 @@
 
 (defrecord HeroDescription [lore role playstyle])
 
+(defn- parse-HeroDescription [as-json]
+  (->HeroDescription
+   (:lore as-json)
+   (:role as-json)
+   (:playstyle as-json)))
+
 (defrecord HeroImages [hero-card
                        hero-card-webp
                        small
@@ -21,11 +27,63 @@
                        background
                        background-webp
                        name-image])
+
+(defn- parse-HeroImages [as-json]
+  (->HeroImages
+   (:icon_hero_card as-json)
+   (:icon_hero_card_webp as-json)
+   (:icon_image_small as-json)
+   (:icon_image_small_webp as-json)
+   (:minimap_image as-json)
+   (:minimap_image_webp as-json)
+   (:selection_image as-json)
+   (:selection_image_webp as-json)
+   (:top_bar_image as-json)
+   (:top_bar_image_webp as-json)
+   (:top_bar_vertical_image as-json)
+   (:top_bar_vertical_image_webp as-json)
+   (:weapon_image as-json)
+   (:weapon_image_webp as-json)
+   (:background_image as-json)
+   (:background_image_webp as-json)
+   (:name_image as-json)))
+
 (defrecord StartingStat [display-name value])
 
-(defrecord StartingStats [max-move-speed sprint-speed crouch-speed move-acceleration light-melee-damage heavy-melee-damage max-health weapon-power reload-speed weapon-power-scale proc-build-up-rate-scale stamina base-health-regen stamina-regen-per-second ability-resource-max ability-resource-regen-per-second crit-adamage-received-scale tech-duration tech-armor-damage-reduction tech-range bullet-armor-damage-reduction])
+(defn- parse-StartingStat [as-json]
+  (->StartingStat
+   (:display_stat_name as-json)
+   (:value as-json)))
 
-(defrecord HeroPhysics [collision-height collision-radius stealth-speed-meters-per-second step-height footstep-sound-travel-distance-meters step-sound-time step-sound-time-sprinting])
+(defrecord StartingStats [max-move-speed
+                          sprint-speed
+                          crouch-speed
+                          move-acceleration
+                          light-melee-damage
+                          heavy-melee-damage
+                          max-health
+                          weapon-power
+                          reload-speed
+                          weapon-power-scale
+                          proc-build-up-rate-scale
+                          stamina
+                          base-health-regen
+                          stamina-regen-per-second
+                          ability-resource-max
+                          ability-resource-regen-per-second
+                          crit-adamage-received-scale
+                          tech-duration
+                          tech-armor-damage-reduction
+                          tech-range
+                          bullet-armor-damage-reduction])
+
+(defrecord HeroPhysics [collision-height
+                        collision-radius
+                        stealth-speed-meters-per-second
+                        step-height
+                        footstep-sound-travel-distance-meters
+                        step-sound-time
+                        step-sound-time-sprinting])
 
 (defrecord HeroColors [glow-enemy glow-friendly glow-team1 glow-team2 ui])
 
@@ -42,45 +100,46 @@
 (defrecord CostBonuses [bonuses])
 
 (defrecord StatsDisplay [health-header-stats
-                          health-body-stats
-                          magic-header-stats
-                          magic-stats
-                          weapon-header-stats
-                          weapon-stats])
+                         health-body-stats
+                         magic-header-stats
+                         magic-stats
+                         weapon-header-stats
+                         weapon-stats])
 
 (defrecord DisplayStats [category stat-type])
 
 (defrecord HeroStatsUI [weapon-stat-display display-stats])
 
 (defrecord Hero [id
-                  class-name
-                  name
-                  recommended-upgrades
-                  recommended-ability-order
-                  player-selectable?
-                  disabled?
-                  in-development?
-                  needs-testing?
-                  assigned-players-only?
-                  tags
-                  gun-tag
-                  hideout-rich-presence
-                  hero-type
-                  prerelease-only?
-                  limited-testing?
-                  complexity
-                  skin
-                  images
-                  items
-                  starting-stats
-                  item-slot-info
-                  physics
-                  colors
-                  shop-stats-display
-                  cost-bonuses
-                  stats-display
-                  hero-stats-ui])
+                 class-name
+                 name
+                 recommended-upgrades
+                 recommended-ability-order
+                 player-selectable?
+                 disabled?
+                 in-development?
+                 needs-testing?
+                 assigned-players-only?
+                 tags
+                 gun-tag
+                 hideout-rich-presence
+                 hero-type
+                 prerelease-only?
+                 limited-testing?
+                 complexity
+                 skin
+                 images
+                 items
+                 starting-stats
+                 item-slot-info
+                 physics
+                 colors
+                 shop-stats-display
+                 cost-bonuses
+                 stats-display
+                 hero-stats-ui])
 
+; Docs at https://assets.deadlock-api.com/scalar#tag/heroes/get/v2/heroes
 (defn list-heroes []
   (let [response (http/get "https://assets.deadlock-api.com/v2/heroes")]
     (json/parse-string (:body response) true)))
