@@ -85,6 +85,10 @@
   (let [response (http/get "https://assets.deadlock-api.com/v2/heroes")]
     (json/parse-string (:body response) true)))
 
+(defn get-hero [id]
+  (let [response (http/get (str "https://assets.deadlock-api.com/v2/heroes/" id))]
+    (json/parse-string (:body response) true)))
+
 (defn list-items []
   (let [response (http/get "https://assets.deadlock-api.com/v2/items")]
     (json/parse-string (:body response) true)))
