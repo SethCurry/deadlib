@@ -1,6 +1,6 @@
-(ns deadlib.deadlock-api
-  (:require [clj-http.client :as http]
-            [cheshire.core :as json]))
+(ns deadlib.deadlock-api.heroes
+  (:require [deadlib.deadlock-api.util :refer [unmarshal-map]]))
+
 
 (defrecord HeroDescription [lore role playstyle])
 
@@ -139,15 +139,45 @@
                  stats-display
                  hero-stats-ui])
 
-; Docs at https://assets.deadlock-api.com/scalar#tag/heroes/get/v2/heroes
-(defn list-heroes []
-  (let [response (http/get "https://assets.deadlock-api.com/v2/heroes")]
-    (json/parse-string (:body response) true)))
+(defn validate-hero-json []
+  (let [expected-keys [:id
+                       :class_name
+                       :name
+                       :description
+                       :recommended_upgrades
+                       :recommended_ability_order]]))
 
-(defn get-hero [id]
-  (let [response (http/get (str "https://assets.deadlock-api.com/v2/heroes/" id))]
-    (json/parse-string (:body response) true)))
-
-(defn list-items []
-  (let [response (http/get "https://assets.deadlock-api.com/v2/items")]
-    (json/parse-string (:body response) true)))
+(defn hero-from-json [as-json]
+  (map->Hero (unmarshal-map as-json {:id {:unmarshal-fn (fn [x] {:id x})}
+                                     :class_name {:unmarshal-fn (fn [x] {:class-name x})}
+                                     :name {:unmarshal-fn (fn [x] {:name x})}
+                                     :description {:unmarshal-fn (fn [x] {:description x})}
+                                     :purchase_bonuses {:unmarshal-fn (fn [x] {:purchase-bonuses x})}
+                                     :scaling_stats {:unmarshal-fn (fn [x] {:scaling-stats x})}
+                                     :level_info {:unmarshal-fn (fn [x] {:level-info x})}
+                                     :standard_level_up_upgrades {:unmarshal-fn (fn [x] {:standard-level-up-upgrades x})}
+                                     :recommended_upgrades {:unmarshal-fn (fn [x] {:recommended-upgrades x})}
+                                     :recommended_ability_order {:unmarshal-fn (fn [x] {:recommended-ability-order x})}
+                                     :player_selectable {:unmarshal-fn (fn [x] {:player-selectable? x})}
+                                     :disabled {:unmarshal-fn (fn [x] {:disabled? x})}
+                                     :in_development {:unmarshal-fn (fn [x] {:in-development? x})}
+                                     :needs_testing {:unmarshal-fn (fn [x] {:needs-testing? x})}
+                                     :assigned_players_only {:unmarshal-fn (fn [x] {:assigned-players-only? x})}
+                                     :tags {:unmarshal-fn (fn [x] {:tags x})}
+                                     :gun_tag {:unmarshal-fn (fn [x] {:gun-tag x})}
+                                     :hideout_rich_presence {:unmarshal-fn (fn [x] {:hideout-rich-presence x})}
+                                     :hero_type {:unmarshal-fn (fn [x] {:hero-type x})}
+                                     :prerelease_only {:unmarshal-fn (fn [x] {:prerelease-only? x})}
+                                     :limited_testing {:unmarshal-fn (fn [x] {:limited-testing? x})}
+                                     :complexity {:unmarshal-fn (fn [x] {:complexity x})}
+                                     :skin {:unmarshal-fn (fn [x] {:skin x})}
+                                     :images {:unmarshal-fn (fn [x] {:images x})}
+                                     :items {:unmarshal-fn (fn [x] {:items x})}
+                                     :starting_stats {:unmarshal-fn (fn [x] {:starting-stats x})}
+                                     :item_slot_info {:unmarshal-fn (fn [x] {:item-slot-info x})}
+                                     :physics {:unmarshal-fn (fn [x] {:physics x})}
+                                     :colors {:unmarshal-fn (fn [x] {:colors x})}
+                                     :shop_stat_display {:unmarshal-fn (fn [x] {:shop-stats-display x})}
+                                     :cost_bonuses {:unmarshal-fn (fn [x] {:cost-bonuses x})}
+                                     :stats_display {:unmarshal-fn (fn [x] {:stats-display x})}
+                                     :hero_stats_ui {:unmarshal-fn (fn [x] {:hero-stats-ui x})}})))
